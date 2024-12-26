@@ -1,0 +1,12 @@
+# Ignorar entornos virtuales
+venv/
+
+# Ignorar archivos temporales
+*.pyc
+*.pyo
+__pycache__/
+
+# Ignorar archivos grandes de TensorFlow
+*.dll
+*.pyd
+*.so

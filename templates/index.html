@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predicción Meteorológica</title>
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Clasificador de Imagenes Meteorológicas</h1>
+        <p>Sube una imagen para obtener su clasificación:</p>
+        
+        <form id="uploadForm" action="/predict/" method="post" enctype="multipart/form-data">
+            <input type="file" name="file" accept="image/*" required />
+            <button type="submit">Subir Imagen</button>
+        </form>
+
+        <div id="result">
+            <p id="category"></p> <!-- Aquí se mostrará la categoría -->
+            <p id="confidence"></p>
+        </div>
+    </div>
+
+    <script>
+        // Manejar la respuesta de la predicción y mostrarla
+        const form = document.getElementById('uploadForm');
+        form.onsubmit = async function(event) {
+            event.preventDefault();
+            const formData = new FormData(form);
+            const response = await fetch('/predict/', {
+                method: 'POST',
+                body: formData,
+            });
+
+            const result = await response.json();
+            if (result.category !== undefined) {
+                document.getElementById('category').innerText = `Clase predicha: ${result.category}`;
+                document.getElementById('confidence').innerText = `Confianza: ${(result.confidence * 100).toFixed(2)}%`;
+            } else {
+                document.getElementById('category').innerText = 'Error al procesar la imagen';
+                document.getElementById('confidence').innerText = result.error;
+            }
+        };
+    </script>
+</body>
+</html>
